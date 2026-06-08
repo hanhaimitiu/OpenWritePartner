@@ -64,5 +64,10 @@ export const aiService = {
 
   async continueNovel(text: string): Promise<string> {
     return this.sendRequest(text, config.continuePrompt);
+  },
+
+  async rewriteNovel(text: string, instruction: string): Promise<string> {
+    const systemPrompt = `你是一位专业的文学编辑和作家。请根据用户的要求对提供的文本进行改写。用户要求：${instruction}\n\n请只返回改写后的文本，不要添加额外的解释说明。`;
+    return this.sendRequest(text, systemPrompt);
   }
 };

@@ -11,7 +11,8 @@
   ],
   "activationEvents": [
     "onCommand:open-write-partner.polish",
-    "onCommand:open-write-partner.continue"
+    "onCommand:open-write-partner.continue",
+    "onCommand:open-write-partner.rewrite"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -24,6 +25,11 @@
       {
         "command": "open-write-partner.continue",
         "title": "AI续写",
+        "category": "Open Write Partner"
+      },
+      {
+        "command": "open-write-partner.rewrite",
+        "title": "AI改写",
         "category": "Open Write Partner"
       }
     ],
@@ -38,6 +44,11 @@
           "command": "open-write-partner.continue",
           "when": "editorHasSelection",
           "group": "OpenWritePartner@2"
+        },
+        {
+          "command": "open-write-partner.rewrite",
+          "when": "editorHasSelection",
+          "group": "OpenWritePartner@3"
         }
       ]
     },
