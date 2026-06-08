@@ -1,0 +1,96 @@
+{
+  "name": "open-write-partner",
+  "displayName": "Open Write Partner",
+  "description": "使用AI对小说进行润色和续写",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:open-write-partner.polish",
+    "onCommand:open-write-partner.continue"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "open-write-partner.polish",
+        "title": "AI润色",
+        "category": "Open Write Partner"
+      },
+      {
+        "command": "open-write-partner.continue",
+        "title": "AI续写",
+        "category": "Open Write Partner"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "open-write-partner.polish",
+          "when": "editorHasSelection",
+          "group": "OpenWritePartner@1"
+        },
+        {
+          "command": "open-write-partner.continue",
+          "when": "editorHasSelection",
+          "group": "OpenWritePartner@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Open Write Partner",
+      "properties": {
+        "openWritePartner.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:8080",
+          "description": "AI API的URL地址"
+        },
+        "openWritePartner.apiKey": {
+          "type": "string",
+          "default": "123",
+          "description": "API密钥"
+        },
+        "openWritePartner.model": {
+          "type": "string",
+          "default": "gpt-3.5-turbo",
+          "description": "使用的AI模型"
+        },
+        "openWritePartner.polishPrompt": {
+          "type": "string",
+          "default": "你是一位专业的文学编辑和作家。请对用户提供的小说文本进行润色优化，包括：\n1. 增强语言表达，让文字更生动优美\n2. 优化句子结构，提升可读性\n3. 丰富细节描写，增强画面感\n4. 保持原有的故事脉络和人物性格\n5. 优化对话，让人物更鲜活\n请只返回润色后的文本，不要添加额外的解释说明。",
+          "description": "AI润色功能的系统提示词"
+        },
+        "openWritePartner.continuePrompt": {
+          "type": "string",
+          "default": "你是一位富有想象力的小说家。请根据用户提供的小说片段，继续创作后续内容：\n1. 保持原有的风格和基调\n2. 延续故事的情节发展\n3. 保持人物性格和对话风格一致\n4. 让故事自然流畅地延续\n5. 可以适当增加悬念和冲突\n请只返回续写的内容，不要添加额外的解释说明。",
+          "description": "AI续写功能的系统提示词"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "typescript": "^5.1.3",
+    "vsce": "^2.15.0",
+    "vscode-test": "^1.6.0"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
