@@ -1,6 +1,6 @@
 # Open Write Partner
 
-一个为小说创作者设计的VSCode插件，利用AI进行文本润色和续写。
+一个为小说创作者设计的VSCode插件，利用AI进行文本润色、续写和改写。
 
 ## 功能特性
 
@@ -14,7 +14,7 @@
 
 ### 方法一：从VSIX安装
 
-1. 下载 `.vsix` 文件
+1. 下载或生成 `.vsix` 文件
 2. 在VSCode中按 `Ctrl+Shift+X` 打开扩展面板
 3. 点击右上角「...」菜单 → 选择「从VSIX安装」
 4. 选择下载的 `.vsix` 文件
@@ -53,6 +53,9 @@ npm run compile
 | `model` | 使用的AI模型 | `gpt-3.5-turbo` |
 | `polishPrompt` | AI润色功能的系统提示词 | 文学编辑风格提示词 |
 | `continuePrompt` | AI续写功能的系统提示词 | 小说家风格提示词 |
+| `rewritePrompt` | AI改写功能的系统提示词 | 文学编辑风格提示词（{instruction} 会被替换为用户输入的改写要求） |
+| `contextLength` | 续写时使用的上下文长度（字符数） | `2000` |
+| `temperature` | AI生成时的温度参数，值越高越随机（0-2） | `0.7` |
 
 ## 技术栈
 
@@ -60,23 +63,112 @@ npm run compile
 - VSCode Extension API
 - Node.js
 
-## 开发
+## 开发指南
+
+### 环境要求
+
+- Node.js >= 16.x
+- npm >= 8.x
+- VSCode >= 1.80.0
+
+### 安装依赖
 
 ```bash
-# 安装依赖
+cd open_write_partner
 npm install
-
-# 编译
-npm run compile
-
-# 启动调试（F5）
 ```
 
-## 打包
+### 编译代码
 
 ```bash
-# 生成VSIX文件
-vsce package
+# 编译一次
+npm run compile
+
+# 监听模式（开发时使用）
+npm run watch
+```
+
+### 启动调试
+
+1. 打开项目文件夹
+2. 按 `F5` 键启动调试
+3. 会打开一个新的VSCode窗口（扩展开发宿主）
+4. 在新窗口中测试插件功能
+
+### 打包VSIX
+
+```bash
+# 方法一：使用项目内的vsce
+.\node_modules\.bin\vsce.cmd package
+
+# 方法二：使用全局安装的vsce（需要先安装）
+# npm install -g @vscode/vsce
+# vsce package
+```
+
+打包成功后，会在项目目录下生成类似 `open-write-partner-1.0.0.vsix` 的文件。
+
+### 发布到市场（可选）
+
+```bash
+# 登录（首次需要）
+vsce login <publisher-name>
+
+# 发布
+vsce publish
+```
+
+## 常见问题
+
+### 1. PowerShell执行策略限制
+
+如果遇到 `ExecutionPolicy` 错误，可以尝试：
+
+```powershell
+# 查看当前执行策略
+Get-ExecutionPolicy
+
+# 设置执行策略（需要管理员权限）
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### 2. 打包时缺少 LICENSE 文件
+
+如果打包时提示缺少 LICENSE 文件，可以创建一个：
+
+```bash
+echo "MIT License" > LICENSE
+```
+
+### 3. 插件无法激活
+
+请确保：
+- AI服务已在配置的 `apiUrl` 地址运行
+- API密钥正确配置
+- VSCode版本 >= 1.80.0
+
+### 4. 编译错误
+
+```bash
+# 清理并重新编译
+rm -rf out/
+npm run compile
+```
+
+## 项目结构
+
+```
+open_write_partner/
+├── .git/                    # Git仓库
+├── .gitignore               # Git忽略配置
+├── README.md                # 项目说明文档
+├── package.json             # 项目配置
+├── tsconfig.json            # TypeScript配置
+├── src/
+│   ├── aiService.ts         # AI服务模块
+│   ├── commands.ts          # 命令处理函数
+│   └── extension.ts         # 扩展入口
+└── node_modules/            # 依赖包
 ```
 
 ## 许可证

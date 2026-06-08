@@ -7,6 +7,7 @@ interface Config {
   model: string;
   polishPrompt: string;
   continuePrompt: string;
+  rewritePrompt: string;
 }
 
 let config: Config = {
@@ -14,7 +15,8 @@ let config: Config = {
   apiKey: '123',
   model: 'gpt-3.5-turbo',
   polishPrompt: '你是一位专业的文学编辑和作家。请对用户提供的小说文本进行润色优化，包括：\n1. 增强语言表达，让文字更生动优美\n2. 优化句子结构，提升可读性\n3. 丰富细节描写，增强画面感\n4. 保持原有的故事脉络和人物性格\n5. 优化对话，让人物更鲜活\n请只返回润色后的文本，不要添加额外的解释说明。',
-  continuePrompt: '你是一位富有想象力的小说家。请根据用户提供的小说片段，继续创作后续内容：\n1. 保持原有的风格和基调\n2. 延续故事的情节发展\n3. 保持人物性格和对话风格一致\n4. 让故事自然流畅地延续\n5. 可以适当增加悬念和冲突\n请只返回续写的内容，不要添加额外的解释说明。'
+  continuePrompt: '你是一位富有想象力的小说家。请根据用户提供的小说片段，继续创作后续内容：\n1. 保持原有的风格和基调\n2. 延续故事的情节发展\n3. 保持人物性格和对话风格一致\n4. 让故事自然流畅地延续\n5. 可以适当增加悬念和冲突\n请只返回续写的内容，不要添加额外的解释说明。',
+  rewritePrompt: '你是一位专业的文学编辑和作家。请根据用户的要求对提供的文本进行改写，不得直接将用户要求的设定直白的写在改写后的文本中。用户要求：${instruction}\n\n请只返回改写后的文本，不要添加额外的解释说明。',
 };
 
 export const aiService = {
@@ -25,6 +27,7 @@ export const aiService = {
     config.model = extensionConfig.get<string>('model', 'gpt-3.5-turbo');
     config.polishPrompt = extensionConfig.get<string>('polishPrompt', config.polishPrompt);
     config.continuePrompt = extensionConfig.get<string>('continuePrompt', config.continuePrompt);
+    config.rewritePrompt = extensionConfig.get<string>('rewritePrompt', config.rewritePrompt);
   },
 
   async sendRequest(prompt: string, systemPrompt: string): Promise<string> {
@@ -67,7 +70,7 @@ export const aiService = {
   },
 
   async rewriteNovel(text: string, instruction: string): Promise<string> {
-    const systemPrompt = `你是一位专业的文学编辑和作家。请根据用户的要求对提供的文本进行改写。用户要求：${instruction}\n\n请只返回改写后的文本，不要添加额外的解释说明。`;
+    const systemPrompt = config.rewritePrompt.replace('{instruction}', instruction);
     return this.sendRequest(text, systemPrompt);
   }
 };
