@@ -1,8 +1,9 @@
 {
   "name": "open-write-partner",
   "displayName": "Open Write Partner",
-  "description": "使用AI对小说进行润色和续写",
+  "description": "使用AI对小说进行润色和审稿",
   "version": "1.0.0",
+  "repository": "https://github.com/hanhaimitiu/OpenWritePartner",
   "engines": {
     "vscode": "^1.80.0"
   },
