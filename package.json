@@ -57,8 +57,8 @@
       "properties": {
         "openWritePartner.apiUrl": {
           "type": "string",
-          "default": "http://localhost:8080",
-          "description": "AI API的URL地址"
+          "default": "http://localhost:8080/v1/chat/completions",
+          "description": "AI API的完整URL地址"
         },
         "openWritePartner.apiKey": {
           "type": "string",

@@ -11,7 +11,7 @@ interface Config {
 }
 
 let config: Config = {
-  apiUrl: 'http://localhost:8080',
+  apiUrl: 'http://localhost:8080/v1/chat/completions',
   apiKey: '123',
   model: 'gpt-3.5-turbo',
   polishPrompt: '你是一位专业的文学编辑和作家。请对用户提供的小说文本进行润色优化，包括：\n1. 增强语言表达，让文字更生动优美\n2. 优化句子结构，提升可读性\n3. 丰富细节描写，增强画面感\n4. 保持原有的故事脉络和人物性格\n5. 优化对话，让人物更鲜活\n请只返回润色后的文本，不要添加额外的解释说明。',
@@ -32,7 +32,7 @@ export const aiService = {
 
   async sendRequest(prompt: string, systemPrompt: string): Promise<string> {
     try {
-      const response = await fetch(`${config.apiUrl}/v1/chat/completions`, {
+      const response = await fetch(config.apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

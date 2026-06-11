@@ -48,7 +48,7 @@ npm run compile
 
 | 配置项 | 说明 | 默认值 |
 |--------|------|--------|
-| `apiUrl` | AI API的URL地址 | `http://localhost:8080` |
+| `apiUrl` | AI API的完整URL地址 | `http://localhost:8080/v1/chat/completions` |
 | `apiKey` | API密钥 | `123` |
 | `model` | 使用的AI模型 | `gpt-3.5-turbo` |
 | `polishPrompt` | AI润色功能的系统提示词 | 文学编辑风格提示词 |
