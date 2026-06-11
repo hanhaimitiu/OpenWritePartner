@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { aiService } from './aiService';
-import { polishCommand, continueCommand, rewriteCommand } from './commands';
+import { polishCommand, reviewCommand, rewriteCommand } from './commands';
 
 export function activate(context: vscode.ExtensionContext) {
   aiService.configure();
@@ -10,9 +10,9 @@ export function activate(context: vscode.ExtensionContext) {
     polishCommand
   );
 
-  const continueDisposable = vscode.commands.registerCommand(
-    'open-write-partner.continue',
-    continueCommand
+  const reviewDisposable = vscode.commands.registerCommand(
+    'open-write-partner.review',
+    reviewCommand
   );
 
   const rewriteDisposable = vscode.commands.registerCommand(
@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(polishDisposable);
-  context.subscriptions.push(continueDisposable);
+  context.subscriptions.push(reviewDisposable);
   context.subscriptions.push(rewriteDisposable);
 
   const configChangeDisposable = vscode.workspace.onDidChangeConfiguration((event) => {

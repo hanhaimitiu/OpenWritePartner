@@ -97,7 +97,7 @@ export async function polishCommand() {
   }
 }
 
-export async function continueCommand() {
+export async function reviewCommand() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     vscode.window.showErrorMessage('请先打开一个文件');
@@ -106,36 +106,34 @@ export async function continueCommand() {
 
   const document = editor.document;
   let selectedText: string;
-  let position: vscode.Position;
 
   if (editor.selection && !editor.selection.isEmpty) {
     selectedText = document.getText(editor.selection);
-    position = editor.selection.end;
   } else {
     selectedText = document.getText();
-    position = new vscode.Position(document.lineCount, 0);
   }
 
   if (!selectedText.trim()) {
-    vscode.window.showErrorMessage('请先编写一些文本作为上下文');
+    vscode.window.showErrorMessage('请选择要审稿的文本');
     return;
   }
 
-  const loading = vscode.window.setStatusBarMessage('正在AI续写中...');
+  const loading = vscode.window.setStatusBarMessage('正在AI审稿中...');
 
   try {
-    const result = await aiService.continueNovel(selectedText);
+    const result = await aiService.reviewNovel(selectedText);
     if (result) {
-      await editor.edit((editBuilder) => {
-        editBuilder.insert(position, '\n' + result);
-      });
-      vscode.window.showInformationMessage('小说续写完成');
+      const panel = vscode.window.createOutputChannel('AI审稿结果');
+      panel.clear();
+      panel.appendLine(result);
+      panel.show();
+      vscode.window.showInformationMessage('审稿完成，结果已显示在输出面板中');
     } else {
-      vscode.window.showErrorMessage('未能获取到续写结果');
+      vscode.window.showErrorMessage('未能获取到审稿结果');
     }
   } catch (error) {
-    console.error('续写失败:', error);
-    vscode.window.showErrorMessage(`续写失败: ${error instanceof Error ? error.message : '未知错误'}`);
+    console.error('审稿失败:', error);
+    vscode.window.showErrorMessage(`审稿失败: ${error instanceof Error ? error.message : '未知错误'}`);
   } finally {
     loading.dispose();
   }
