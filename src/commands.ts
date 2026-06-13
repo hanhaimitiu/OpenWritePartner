@@ -105,14 +105,18 @@ export async function rewriteCommand() {
     return;
   }
 
-  const instruction = await vscode.window.showInputBox({
-    prompt: '请输入改写要求（留空则使用预设中的默认要求）',
-    placeHolder: '例如：改写成古风风格 / 让对话更幽默 / （留空直接使用预设）'
-  });
+  let systemPrompt = prompt;
 
-  const instructionText = instruction && instruction.trim() ? instruction.trim() : '按预设要求改写';
+  // 只有当预设中含有 {instruction} 占位符时，才询问用户补充改写要求
+  if (prompt.includes('{instruction}')) {
+    const instruction = await vscode.window.showInputBox({
+      prompt: '请输入改写要求',
+      placeHolder: '例如：改写成古风风格 / 让对话更幽默'
+    });
 
-  const systemPrompt = prompt.replace('{instruction}', instructionText);
+    const instructionText = instruction && instruction.trim() ? instruction.trim() : '按预设要求改写';
+    systemPrompt = prompt.replace('{instruction}', instructionText);
+  }
 
   const loading = vscode.window.setStatusBarMessage('正在AI改写中...');
 
