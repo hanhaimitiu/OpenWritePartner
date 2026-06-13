@@ -65,12 +65,24 @@ export const aiService = {
     return this.sendRequest(text, config.polishPrompt);
   },
 
+  async polishNovelWithPrompt(text: string, prompt: string): Promise<string> {
+    return this.sendRequest(text, prompt);
+  },
+
   async reviewNovel(text: string): Promise<string> {
     return this.sendRequest(text, config.reviewPrompt);
+  },
+
+  async reviewNovelWithPrompt(text: string, prompt: string): Promise<string> {
+    return this.sendRequest(text, prompt);
   },
 
   async rewriteNovel(text: string, instruction: string): Promise<string> {
     const systemPrompt = config.rewritePrompt.replace('{instruction}', instruction);
     return this.sendRequest(text, systemPrompt);
+  },
+
+  async rewriteNovelWithPrompt(text: string, prompt: string): Promise<string> {
+    return this.sendRequest(text, prompt);
   }
 };
